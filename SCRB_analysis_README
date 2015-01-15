@@ -1,0 +1,30 @@
+Workflow SC analysis December 2014
+
+####STEP 1####
+####USE script "parseINDEX_SCRB.pl" that outputs two formated fastq files and index counts to STD out.
+From original fastq files generate formated fastq files prefixed with "index_" with:
+#1# "index", "UMI","number of T bases between nt 15 and 45" appended to read name separated with ";".
+#2# Read1 truncated starts nt 44 ends nt 93.
+#3# Read2 truncated starts nt 1 end nt 50.
+
+
+####STEP 2####
+From formated fastq files genetate Cell-specific fasta files compatible with my original RNA-seq pipeline.
+####USE wrapper "SC_fastqTofasta.pl" with second argument set to "fasta". Function calls the "extractINDEX_SCRB.pl" script sequencially for each
+####of the index sequence provided in the array @indexes.   
+#1#returns "*_IndexNumber.fasta" files ex: _I4.fasta. Returns reads with exact match or one mismatch in index sequence.
+#comment: will need re-evaluation when indexes will be less than one mismatch away.
+#2#returns "IndexNumber_*.index" files that contains indexes sequence for each read in the fasta file.
+For further processing with bwa of Bowtie generate Cell-specific fastq files.
+####USE wrapper "SC_fastqTofasta.pl" with second argument set to "fastq". Function calls the "extractINDEX_SCRB.pl" script sequencially for each
+####of the index sequence provided in the array @indexes.   
+#1#returns "*_IndexNumber.fastq" files ex: _I4.fastq. Returns reads with exact match or one mismatch in index sequence.
+#comment: will need re-evaluation when indexes will be less than one mismatch away.
+#2#returns "IndexNumber_*.index" files that contains indexes sequence for each read in the fastq file.
+
+####STEP 3####
+CHECK IF A READ ENDS UP IN MORE THAN ONE FASTAS FILE, MEANING IS ASSIGNED TO MORE THAN ONE CELL.
+WORK ON UMIs... Before of after mapping?
+
+
+
